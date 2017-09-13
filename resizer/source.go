@@ -52,7 +52,7 @@ type S3Source struct {
 }
 
 func NewS3Source(bucket, region, prefix string) (*S3Source, error) {
-	auth, err := aws.EnvAuth()
+	auth, err := aws.GetAuth("", "")
 	if err != nil {
 		return nil, err
 	}
