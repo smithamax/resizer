@@ -9,6 +9,10 @@ import (
 )
 
 func main() {
+	viper.SetDefault("listen_address", ":8080")
+	viper.SetDefault("source_type", "filesystem")
+	viper.SetDefault("filesystem_source_path", ".")
+
 	viper.SetConfigName("config")
 	viper.AddConfigPath("/etc/resizer/")
 	viper.AddConfigPath(".")
@@ -43,5 +47,5 @@ func main() {
 	resizerHandler := resizer.Handler(source)
 	http.Handle("/images/", http.StripPrefix("/images/", resizerHandler))
 	http.Handle("/images", http.StripPrefix("/images", resizerHandler))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(viper.GetString("listen_address"), nil)
 }
