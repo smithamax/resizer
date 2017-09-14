@@ -9,6 +9,10 @@ import (
 var defaultFilter imaging.ResampleFilter = imaging.Lanczos
 
 func Resize(img image.Image, w, h int, fit string) image.Image {
+	if w == 0 && h == 0 {
+		return img
+	}
+
 	switch fit {
 	case "clip", "":
 		if w == 0 || h == 0 {
