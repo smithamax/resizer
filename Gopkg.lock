@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/aws/aws-sdk-go"
+  packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts"]
+  revision = "124a6dabcd822d9b88383d8e2186e696a12d791d"
+  version = "v1.10.44"
+
+[[projects]]
   name = "github.com/disintegration/imaging"
   packages = ["."]
   revision = "a5858022df0e1734a59f973fffe3f87b51c087ed"
@@ -14,22 +20,28 @@
   version = "v1.4.2"
 
 [[projects]]
+  name = "github.com/go-ini/ini"
+  packages = ["."]
+  revision = "20b96f641a5ea98f2f8619ff4f3e061cff4833bd"
+  version = "v1.28.2"
+
+[[projects]]
   branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
   revision = "8f6b1344a92ff8877cf24a5de9177bf7d0a2a187"
 
 [[projects]]
+  name = "github.com/jmespath/go-jmespath"
+  packages = ["."]
+  revision = "3433f3ea46d9f8019119e7dd41274e112a2359a9"
+  version = "0.2.2"
+
+[[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
   revision = "be5ece7dd465ab0765a9682137865547526d1dfb"
   version = "v1.7.3"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/mitchellh/goamz"
-  packages = ["aws","s3"]
-  revision = "caaaea8b30ee15616494ee68abd5d8ebbbef05cf"
 
 [[projects]]
   branch = "master"
@@ -87,12 +99,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/vaughan0/go-ini"
-  packages = ["."]
-  revision = "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1"
-
-[[projects]]
-  branch = "master"
   name = "golang.org/x/image"
   packages = ["bmp","tiff","tiff/lzw"]
   revision = "e20db36d77bd0cb36cea8fe49d5c37d82d21591f"
@@ -101,13 +107,13 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "a5054c7c1385fd50d9394475365355a87a7873ec"
+  revision = "062cd7e4e68206d8bab9b18396626e855c992658"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["internal/gen","internal/triegen","internal/ucd","transform","unicode/cldr","unicode/norm"]
-  revision = "bd91bbf73e9a4a801adbfb97133c992678533126"
+  revision = "acd49d43e9b95df46670431bf5c7ae59586daad8"
 
 [[projects]]
   branch = "v2"
@@ -118,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "92c82d0c6f877f53cb48442d40f23011145d0236ee2cb26b86aa3958c59093cb"
+  inputs-digest = "0ec174e868dbd76a41bd8af51cbe204401410734c44112a3592c3b0d424ee5c1"
   solver-name = "gps-cdcl"
   solver-version = 1

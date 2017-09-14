@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 
-	"github.com/mitchellh/goamz/aws"
-	"github.com/mitchellh/goamz/s3"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 type Source interface {
@@ -46,41 +47,52 @@ func (s FileSource) Put(p string, r io.Reader, contentType string) error {
 }
 
 type S3Source struct {
-	bucket string
-	prefix string
-	client *s3.S3
+	bucket   string
+	prefix   string
+	client   *s3.S3
+	uploader *s3manager.Uploader
 }
 
 func NewS3Source(bucket, region, prefix string) (*S3Source, error) {
-	auth, err := aws.GetAuth("", "")
+	sess, err := session.NewSession(&aws.Config{})
 	if err != nil {
 		return nil, err
 	}
 	return &S3Source{
 		bucket,
 		prefix,
-		s3.New(auth, aws.Regions[region]),
+		s3.New(sess),
+		s3manager.NewUploader(sess),
 	}, nil
 }
 
 func (s *S3Source) Get(p string) (io.ReadCloser, error) {
 	path := filepath.Join(s.prefix, p)
-	r, err := s.client.Bucket(s.bucket).GetReader(path)
+	input := &s3.GetObjectInput{
+		Bucket: &s.bucket,
+		Key:    &path,
+	}
 
-	if aerr, ok := err.(*s3.Error); ok {
-		switch aerr.StatusCode {
-		case http.StatusNotFound:
+	result, err := s.client.GetObject(input)
+	if aerr, ok := err.(awserr.Error); ok {
+		switch aerr.Code() {
+		case s3.ErrCodeNoSuchKey:
 			return nil, nil
 		}
 	}
-	return r, err
+	if err != nil {
+		return nil, err
+	}
+	return result.Body, nil
 }
 
 func (s *S3Source) Put(p string, r io.Reader, contentType string) error {
 	path := filepath.Join(s.prefix, p)
-	data, err := ioutil.ReadAll(r)
-	if err != nil {
-		return err
-	}
-	return s.client.Bucket(s.bucket).Put(path, data, contentType, s3.Private)
+	_, err := s.uploader.Upload(&s3manager.UploadInput{
+		Bucket:      &s.bucket,
+		Key:         &path,
+		Body:        r,
+		ContentType: &contentType,
+	})
+	return err
 }
