@@ -54,7 +54,7 @@ type S3Source struct {
 }
 
 func NewS3Source(bucket, region, prefix string) (*S3Source, error) {
-	sess, err := session.NewSession(&aws.Config{})
+	sess, err := session.NewSession(&aws.Config{Region: &region})
 	if err != nil {
 		return nil, err
 	}
