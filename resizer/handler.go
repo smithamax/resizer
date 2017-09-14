@@ -60,12 +60,15 @@ func (h *handler) handleGet(w http.ResponseWriter, r *http.Request) *appError {
 		return &appError{err, "Error getting image", http.StatusInternalServerError}
 	}
 	if imgr == nil {
+		// For now just cache 404s for a little while
+		w.Header().Set("Cache-Control", "public, max-age=180")
 		return &appError{err, "Image not found", http.StatusNotFound}
 	}
 	defer imgr.Close()
 	if raw {
 		// TODO: Add format header for raw images
 		// w.Header().Set("Content-Type", fmt.Sprintf("image/%s", format))
+		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		if _, err = io.Copy(w, imgr); err != nil {
 			return &appError{err, "Error writing response", http.StatusInternalServerError}
 		}
@@ -78,6 +81,7 @@ func (h *handler) handleGet(w http.ResponseWriter, r *http.Request) *appError {
 
 	img = Resize(img, int(width), int(height), fit)
 
+	w.Header().Set("Cache-Control", "public, max-age=31536000")
 	w.Header().Set("Content-Type", fmt.Sprintf("image/%s", format))
 	if err = Encode(w, img, format); err != nil {
 		return &appError{err, "Error writing response", http.StatusInternalServerError}
