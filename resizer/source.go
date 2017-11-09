@@ -6,9 +6,13 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
+	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -55,9 +59,19 @@ type S3Source struct {
 
 func NewS3Source(bucket, region, prefix string) (*S3Source, error) {
 	sess, err := session.NewSession(&aws.Config{Region: &region})
+
 	if err != nil {
 		return nil, err
 	}
+
+	creds := credentials.NewChainCredentials([]credentials.Provider{
+		&credentials.EnvProvider{},
+		&credentials.SharedCredentialsProvider{Filename: "", Profile: ""},
+		&ec2rolecreds.EC2RoleProvider{Client: ec2metadata.New(sess), ExpiryWindow: 5 * time.Minute},
+	})
+
+	sess.Config.Credentials = creds
+
 	return &S3Source{
 		bucket,
 		prefix,
