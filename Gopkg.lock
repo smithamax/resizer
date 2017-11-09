@@ -2,16 +2,28 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/alecthomas/template"
+  packages = [".","parse"]
+  revision = "a0175ee3bccc567396460bf5acd36800cb10c49c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/alecthomas/units"
+  packages = ["."]
+  revision = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
+
+[[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restxml","private/protocol/xml/xmlutil","service/s3","service/s3/s3iface","service/s3/s3manager","service/sts"]
-  revision = "124a6dabcd822d9b88383d8e2186e696a12d791d"
-  version = "v1.10.44"
+  revision = "a201bf33b18ad4ab54344e4bc26b87eb6ad37b8e"
+  version = "v1.12.25"
 
 [[projects]]
   name = "github.com/disintegration/imaging"
   packages = ["."]
-  revision = "a5858022df0e1734a59f973fffe3f87b51c087ed"
-  version = "v1.2.1"
+  revision = "dd50a3ee9985ccd313a2f03c398fcaedc96dc707"
+  version = "v1.2.4"
 
 [[projects]]
   name = "github.com/fsnotify/fsnotify"
@@ -22,20 +34,19 @@
 [[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
-  revision = "20b96f641a5ea98f2f8619ff4f3e061cff4833bd"
-  version = "v1.28.2"
+  revision = "f280b3ba517bf5fc98922624f21fb0e7a92adaec"
+  version = "v1.30.3"
 
 [[projects]]
   branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
-  revision = "8f6b1344a92ff8877cf24a5de9177bf7d0a2a187"
+  revision = "23c074d0eceb2b8a5bfdbb271ab780cde70f05a8"
 
 [[projects]]
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
-  revision = "3433f3ea46d9f8019119e7dd41274e112a2359a9"
-  version = "0.2.2"
+  revision = "0b12d6b5"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -47,19 +58,13 @@
   branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "d0303fe809921458f417bcf828397a65db30a7e4"
-
-[[projects]]
-  name = "github.com/pelletier/go-buffruneio"
-  packages = ["."]
-  revision = "c37440a7cf42ac63b919c752ca73a85067e05992"
-  version = "v0.2.0"
+  revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
 
 [[projects]]
   name = "github.com/pelletier/go-toml"
   packages = ["."]
-  revision = "5ccdfb18c776b740aecaf085c4d9a2779199c279"
-  version = "v1.0.0"
+  revision = "16398bac157da96aa88f98a2df640c7f32af1da2"
+  version = "v1.0.1"
 
 [[projects]]
   branch = "go1"
@@ -71,7 +76,7 @@
   branch = "master"
   name = "github.com/spf13/afero"
   packages = [".","mem"]
-  revision = "ee1bd8ee15a1306d1f9201acc41ef39cd9f99a1b"
+  revision = "5660eeed305fe5f69c8fc6cf899132a459a97064"
 
 [[projects]]
   name = "github.com/spf13/cast"
@@ -92,28 +97,34 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/spf13/viper"
   packages = ["."]
-  revision = "25b30aa063fc18e48662b86996252eabdcf2f0c7"
-  version = "v1.0.0"
+  revision = "8ef37cbca71638bf32f3d5e194117d4cb46da163"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/image"
   packages = ["bmp","tiff","tiff/lzw"]
-  revision = "e20db36d77bd0cb36cea8fe49d5c37d82d21591f"
+  revision = "f7e31b4ea2e3413ab91b4e7d2dc83e5f8d19a44c"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "062cd7e4e68206d8bab9b18396626e855c992658"
+  revision = "4b45465282a4624cf39876842a017334f13b8aff"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["internal/gen","internal/triegen","internal/ucd","transform","unicode/cldr","unicode/norm"]
-  revision = "acd49d43e9b95df46670431bf5c7ae59586daad8"
+  revision = "88f656faf3f37f690df1a32515b479415e1a6769"
+
+[[projects]]
+  name = "gopkg.in/alecthomas/kingpin.v2"
+  packages = ["."]
+  revision = "1087e65c9441605df944fb12c33f0fe7072d18ca"
+  version = "v2.2.5"
 
 [[projects]]
   branch = "v2"
@@ -124,6 +135,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0ec174e868dbd76a41bd8af51cbe204401410734c44112a3592c3b0d424ee5c1"
+  inputs-digest = "fff3bbcaec522eb6da5f3193bbba4296b3eafd9e13d0d251c11e74db45e5db96"
   solver-name = "gps-cdcl"
   solver-version = 1

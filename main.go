@@ -6,11 +6,13 @@ import (
 
 	"github.com/smithamax/resizer/resizer"
 	"github.com/spf13/viper"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
+
+var version = "master"
 
 func main() {
 	viper.SetDefault("listen_address", ":8080")
-	viper.SetDefault("source_type", "filesystem")
 	viper.SetDefault("filesystem_source_path", ".")
 
 	viper.SetConfigName("config")
@@ -18,6 +20,9 @@ func main() {
 	viper.AddConfigPath(".")
 	viper.SetEnvPrefix("resizer")
 	viper.AutomaticEnv()
+
+	kingpin.Version(version)
+	kingpin.Parse()
 
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -47,5 +52,11 @@ func main() {
 	resizerHandler := resizer.Handler(source)
 	http.Handle("/images/", http.StripPrefix("/images/", resizerHandler))
 	http.Handle("/images", http.StripPrefix("/images", resizerHandler))
-	http.ListenAndServe(viper.GetString("listen_address"), nil)
+
+	err = http.ListenAndServe(viper.GetString("listen_address"), nil)
+
+	if err != nil {
+		panic(err)
+	}
+
 }

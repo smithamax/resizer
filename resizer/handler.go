@@ -53,8 +53,6 @@ func (h *handler) handleGet(w http.ResponseWriter, r *http.Request) *appError {
 	raw, _ := strconv.ParseBool(q.Get("raw"))
 	fit := q.Get("fit")
 
-	fmt.Println(path)
-
 	imgr, err := h.source.Get(path)
 	if err != nil {
 		return &appError{err, "Error getting image", http.StatusInternalServerError}

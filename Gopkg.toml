@@ -34,5 +34,5 @@
   name = "github.com/rwcarlsen/goexif"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/spf13/viper"
-  version = "1.0.0"
