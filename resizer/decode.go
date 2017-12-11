@@ -1,31 +1,25 @@
 package resizer
 
 import (
-	"bytes"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
-	"io/ioutil"
 
 	"github.com/disintegration/imaging"
 	"github.com/rwcarlsen/goexif/exif"
 )
 
-func NormaliseDecode(r io.Reader) (image.Image, string, error) {
-	b, err := ioutil.ReadAll(r)
-	if err != nil {
-		return nil, "", err
-	}
-
-	br := bytes.NewReader(b)
-
-	img, format, err := image.Decode(br)
+func NormaliseDecode(r io.ReadSeeker) (image.Image, string, error) {
+	img, format, err := image.Decode(r)
 	if err != nil || format != "jpeg" {
 		return img, format, err
 	}
 
-	br.Seek(0, 0)
+	r.Seek(0, 0)
 
-	x, err := exif.Decode(br)
+	x, err := exif.Decode(r)
 	if err != nil {
 		// Ignore exif error and just return what we got
 		// TODO: Add logging of error

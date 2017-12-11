@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"mime"
 	"net/http"
@@ -72,16 +73,19 @@ func (h *handler) handleGet(w http.ResponseWriter, r *http.Request) *appError {
 		}
 	}
 
-	img, format, err := NormaliseDecode(imgr)
+	b, err := ioutil.ReadAll(imgr)
 	if err != nil {
-		return &appError{err, "Error decoding image", http.StatusInternalServerError}
+		return &appError{err, "Error reading image", http.StatusInternalServerError}
 	}
 
-	img = Resize(img, int(width), int(height), fit)
+	img, format, err := Transform(b, int(width), int(height), fit)
+	if err != nil {
+		return &appError{err, "Error transforming image", http.StatusInternalServerError}
+	}
 
 	w.Header().Set("Cache-Control", "public, max-age=31536000")
 	w.Header().Set("Content-Type", fmt.Sprintf("image/%s", format))
-	if err = Encode(w, img, format); err != nil {
+	if _, err = w.Write(img); err != nil {
 		return &appError{err, "Error writing response", http.StatusInternalServerError}
 	}
 	return nil
@@ -105,17 +109,20 @@ func (h *handler) handlePost(w http.ResponseWriter, r *http.Request) *appError {
 	if mediaType == "multipart/form-data" {
 		file, _, err = r.FormFile("file")
 		if err != nil {
-			return &appError{err, "Error reading form file", http.StatusBadRequest}
+			return &appError{err, "Error reading form", http.StatusBadRequest}
 		}
 	} else {
 		file = r.Body
 	}
-	io.Copy(buf, io.TeeReader(file, hash))
+	b, err := ioutil.ReadAll(io.TeeReader(file, hash))
+	if err != nil {
+		return &appError{err, "Error reading file", http.StatusBadRequest}
+	}
 	file.Close()
 
 	name := fmt.Sprintf("%x", hash.Sum(nil))
 
-	img, format, err := NormaliseDecode(buf)
+	img, format, err := NormaliseDecode(bytes.NewReader(b))
 	if err != nil {
 		return &appError{err, "Error decoding image", http.StatusBadRequest}
 	}

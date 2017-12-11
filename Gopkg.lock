@@ -132,9 +132,15 @@
   packages = ["."]
   revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
 
+[[projects]]
+  branch = "master"
+  name = "willnorris.com/go/gifresize"
+  packages = ["."]
+  revision = "6a222229fa0697e6da06ec80f8ffd0ada346669d"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "fff3bbcaec522eb6da5f3193bbba4296b3eafd9e13d0d251c11e74db45e5db96"
+  inputs-digest = "312ee98dd7fc2a5832f8746086a61401280858a1828d0a78fed1c1961b6793f2"
   solver-name = "gps-cdcl"
   solver-version = 1
