@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
+	"path"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -28,7 +28,7 @@ type FileSource struct {
 }
 
 func (s FileSource) Get(p string) (io.ReadCloser, error) {
-	path := filepath.Join(s.Root, p)
+	path := path.Join(s.Root, p)
 	file, err := os.Open(path)
 	if os.IsNotExist(err) {
 		return nil, nil
@@ -37,7 +37,7 @@ func (s FileSource) Get(p string) (io.ReadCloser, error) {
 }
 
 func (s FileSource) Put(p string, r io.Reader, contentType string) error {
-	path := filepath.Join(s.Root, p)
+	path := path.Join(s.Root, p)
 	f, err := os.Create(path)
 	defer f.Close()
 	if err != nil {
@@ -81,7 +81,7 @@ func NewS3Source(bucket, region, prefix string) (*S3Source, error) {
 }
 
 func (s *S3Source) Get(p string) (io.ReadCloser, error) {
-	path := filepath.Join(s.prefix, p)
+	path := path.Join(s.prefix, p)
 	input := &s3.GetObjectInput{
 		Bucket: &s.bucket,
 		Key:    &path,
@@ -101,7 +101,7 @@ func (s *S3Source) Get(p string) (io.ReadCloser, error) {
 }
 
 func (s *S3Source) Put(p string, r io.Reader, contentType string) error {
-	path := filepath.Join(s.prefix, p)
+	path := path.Join(s.prefix, p)
 	_, err := s.uploader.Upload(&s3manager.UploadInput{
 		Bucket:      &s.bucket,
 		Key:         &path,

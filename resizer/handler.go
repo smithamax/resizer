@@ -3,6 +3,7 @@ package resizer
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"mime"
 	"net/http"
+	"path"
 	"strconv"
 )
 
@@ -120,7 +122,7 @@ func (h *handler) handlePost(w http.ResponseWriter, r *http.Request) *appError {
 	}
 	file.Close()
 
-	name := fmt.Sprintf("%x", hash.Sum(nil))
+	name := path.Join(r.URL.Path, hex.EncodeToString(hash.Sum(nil)))
 
 	img, format, err := NormaliseDecode(bytes.NewReader(b))
 	if err != nil {
