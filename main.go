@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/smithamax/resizer/resizer"
 	"github.com/spf13/viper"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -52,6 +53,7 @@ func main() {
 	resizerHandler := resizer.Handler(source)
 	http.Handle("/images/", http.StripPrefix("/images/", resizerHandler))
 	http.Handle("/images", http.StripPrefix("/images", resizerHandler))
+	http.Handle("/metrics", promhttp.Handler())
 
 	err = http.ListenAndServe(viper.GetString("listen_address"), nil)
 
