@@ -1,13 +1,9 @@
 
 setup:
-	go get -u github.com/alecthomas/gometalinter
-	go get -u github.com/golang/dep/cmd/dep
-	dep ensure
-	gometalinter --install
-
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.1
 
 lint:
-	gometalinter --errors --vendor ./...
+	golangci-lint run
 
 test:
 	go test

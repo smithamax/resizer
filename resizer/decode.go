@@ -17,7 +17,10 @@ func NormaliseDecode(r io.ReadSeeker) (image.Image, string, error) {
 		return img, format, err
 	}
 
-	r.Seek(0, 0)
+	if _, err := r.Seek(0, 0); err != nil {
+		// Ignore seek error and just return what we got
+		return img, format, nil
+	}
 
 	x, err := exif.Decode(r)
 	if err != nil {

@@ -39,10 +39,10 @@ func (s FileSource) Get(p string) (io.ReadCloser, error) {
 func (s FileSource) Put(p string, r io.Reader, contentType string) error {
 	path := path.Join(s.Root, p)
 	f, err := os.Create(path)
-	defer f.Close()
 	if err != nil {
 		return fmt.Errorf("could not create file: %s", err)
 	}
+	defer f.Close()
 	w := bufio.NewWriter(f)
 
 	_, err = io.Copy(w, r)

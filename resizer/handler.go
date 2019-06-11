@@ -156,7 +156,11 @@ func postHandler(source Source) appHandler {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(res)
+
+		if _, err := w.Write(res); err != nil {
+			return &appError{err, "Error writing response", http.StatusInternalServerError}
+		}
+
 		return nil
 	}
 }

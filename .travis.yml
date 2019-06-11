@@ -1,5 +1,6 @@
 language: go
-go: 1.9
+go:
+  - "1.12"
 install:
   - make setup
 script:
