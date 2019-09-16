@@ -81,6 +81,10 @@ func NewS3Source(bucket, region, prefix string) (*S3Source, error) {
 }
 
 func (s *S3Source) Get(p string) (io.ReadCloser, error) {
+	if p == "" {
+		return nil, nil
+	}
+
 	path := path.Join(s.prefix, p)
 	input := &s3.GetObjectInput{
 		Bucket: &s.bucket,
