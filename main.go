@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/smithamax/resizer/resizer"
+	"github.com/smithamax/resizer/pkg/resizer"
 	"github.com/spf13/viper"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
