@@ -6,6 +6,10 @@ lint:
 	golangci-lint run
 
 test:
-	go test
+	go test \
+		-mod readonly \
+		-race \
+		-cover \
+		./...
 
 ci: test lint
