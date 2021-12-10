@@ -6,8 +6,6 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
-
-	"willnorris.com/go/gifresize"
 )
 
 func Transform(imgb []byte, w, h int, fit string) ([]byte, string, error) {
@@ -22,7 +20,7 @@ func Transform(imgb []byte, w, h int, fit string) ([]byte, string, error) {
 		transform := func(img image.Image) image.Image {
 			return resize(img, w, h, fit)
 		}
-		err = gifresize.Process(buf, bytes.NewReader(imgb), transform)
+		err = processGIF(buf, imgb, transform)
 		if err != nil {
 			return nil, "", err
 		}
