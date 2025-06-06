@@ -18,7 +18,6 @@ package resizer
 // Code in this file is adapted from willnorris.com/go/gifresize
 
 import (
-	"bytes"
 	"fmt"
 	"image"
 	"image/color"
@@ -32,22 +31,21 @@ type transformFunc func(image.Image) image.Image
 
 // Process the GIF read from r, applying transform to each frame, and writing
 // the result to w.
-func processGIF(w io.Writer, src []byte, transform transformFunc) error {
-	r := bytes.NewReader(src)
+func processGIF(w io.Writer, src io.Reader, transform transformFunc) error {
 	if transform == nil {
-		_, err := io.Copy(w, r)
+		_, err := io.Copy(w, src)
 		return err
 	}
 
 	// Decode the original gif.
-	im, err := gif.DecodeAll(r)
+	im, err := gif.DecodeAll(src)
 	if err != nil {
 		return err
 	}
 
 	// HACK: If animated skip resize
 	if len(im.Image) > 1 {
-		_, err := w.Write(src)
+		_, err := io.Copy(w, src)
 		return err
 	}
 
@@ -85,6 +83,6 @@ func processGIF(w io.Writer, src []byte, transform transformFunc) error {
 func imageToPaletted(img image.Image, p color.Palette) *image.Paletted {
 	b := img.Bounds()
 	pm := image.NewPaletted(b, p)
-	draw.FloydSteinberg.Draw(pm, b, img, image.ZP)
+	draw.FloydSteinberg.Draw(pm, b, img, image.Point{})
 	return pm
 }
