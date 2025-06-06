@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
+
 	"log"
 	"mime"
 	"net/http"
@@ -79,16 +79,11 @@ func getHandler(source Source) appHandler {
 			}
 		}
 
-		b, err := ioutil.ReadAll(imgr)
-		if err != nil {
-			return &appError{err, "Error reading image", http.StatusInternalServerError}
-		}
-
-		img, format, err := Transform(b, int(width), int(height), fit)
+		img, format, err := Transform(imgr, int(width), int(height), fit)
 		if err != nil {
 			return &appError{err, "Error transforming image", http.StatusInternalServerError}
 		}
-		compressionRatio.WithLabelValues().Observe(float64(len(img)) / float64(len(b)))
+		compressionRatio.WithLabelValues().Observe(float64(len(img)) / float64(r.ContentLength))
 
 		w.Header().Set("Cache-Control", "public, max-age=31536000")
 		w.Header().Set("Content-Type", fmt.Sprintf("image/%s", format))
@@ -123,7 +118,7 @@ func postHandler(source Source) appHandler {
 		} else {
 			file = r.Body
 		}
-		b, err := ioutil.ReadAll(io.TeeReader(file, hash))
+		b, err := io.ReadAll(io.TeeReader(file, hash))
 		if err != nil {
 			return &appError{err, "Error reading file", http.StatusBadRequest}
 		}

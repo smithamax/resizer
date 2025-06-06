@@ -6,10 +6,11 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
+	"io"
 )
 
-func Transform(imgb []byte, w, h int, fit string) ([]byte, string, error) {
-	img, format, err := NormaliseDecode(bytes.NewReader(imgb))
+func Transform(imgr io.ReadCloser, w, h int, fit string) ([]byte, string, error) {
+	img, format, err := NormaliseDecode(imgr)
 	if err != nil {
 		return nil, "", err
 	}
@@ -20,7 +21,7 @@ func Transform(imgb []byte, w, h int, fit string) ([]byte, string, error) {
 		transform := func(img image.Image) image.Image {
 			return resize(img, w, h, fit)
 		}
-		err = processGIF(buf, imgb, transform)
+		err = processGIF(buf, imgr, transform)
 		if err != nil {
 			return nil, "", err
 		}

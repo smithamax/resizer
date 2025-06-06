@@ -11,15 +11,10 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 )
 
-func NormaliseDecode(r io.ReadSeeker) (image.Image, string, error) {
+func NormaliseDecode(r io.Reader) (image.Image, string, error) {
 	img, format, err := image.Decode(r)
 	if err != nil || format != "jpeg" {
 		return img, format, err
-	}
-
-	if _, err := r.Seek(0, 0); err != nil {
-		// Ignore seek error and just return what we got
-		return img, format, nil
 	}
 
 	x, err := exif.Decode(r)
