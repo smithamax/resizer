@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"runtime"
+
 	"log"
 	"mime"
 	"net/http"
@@ -19,7 +21,14 @@ func Handler(source Source) http.Handler {
 	get := handlerMetric(appErrorHandler(getHandler(source)), "fetch")
 	post := handlerMetric(appErrorHandler(postHandler(source)), "upload")
 
+	// TODO: make this configurable
+	limiter := make(chan struct{}, runtime.NumCPU())
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		limiter <- struct{}{}
+		defer func() {
+			<-limiter
+		}()
 
 		switch r.Method {
 		case http.MethodGet:
