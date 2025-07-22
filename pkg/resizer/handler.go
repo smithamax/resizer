@@ -79,7 +79,14 @@ func getHandler(source Source) appHandler {
 			}
 		}
 
-		img, format, err := Transform(imgr, int(width), int(height), fit)
+		buffer, err := io.ReadAll(imgr)
+		if err != nil {
+			return &appError{err, "Error getting image", http.StatusInternalServerError}
+		}
+
+		reader := bytes.NewReader(buffer)
+
+		img, format, err := Transform(reader, int(width), int(height), fit)
 		if err != nil {
 			return &appError{err, "Error transforming image", http.StatusInternalServerError}
 		}

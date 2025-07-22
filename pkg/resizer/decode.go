@@ -11,10 +11,16 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 )
 
-func NormaliseDecode(r io.Reader) (image.Image, string, error) {
+func NormaliseDecode(r io.ReadSeeker) (image.Image, string, error) {
 	img, format, err := image.Decode(r)
 	if err != nil || format != "jpeg" {
 		return img, format, err
+	}
+
+	_, err = r.Seek(0, io.SeekStart)
+
+	if err != nil {
+		return nil, "", err
 	}
 
 	x, err := exif.Decode(r)
@@ -41,11 +47,11 @@ func NormaliseDecode(r io.Reader) (image.Image, string, error) {
 	case 5:
 		img = imaging.Transpose(img)
 	case 6:
-		img = imaging.Rotate90(img)
+		img = imaging.Rotate270(img)
 	case 7:
 		img = imaging.Transverse(img)
 	case 8:
-		img = imaging.Rotate270(img)
+		img = imaging.Rotate90(img)
 	}
 
 	return img, format, nil

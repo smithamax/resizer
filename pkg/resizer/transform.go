@@ -9,7 +9,7 @@ import (
 	"io"
 )
 
-func Transform(imgr io.ReadCloser, w, h int, fit string) ([]byte, string, error) {
+func Transform(imgr io.ReadSeeker, w, h int, fit string) ([]byte, string, error) {
 	img, format, err := NormaliseDecode(imgr)
 	if err != nil {
 		return nil, "", err
