@@ -17,9 +17,10 @@ func NormaliseDecode(r io.ReadSeeker) (image.Image, string, error) {
 		return img, format, err
 	}
 
-	if _, err := r.Seek(0, 0); err != nil {
-		// Ignore seek error and just return what we got
-		return img, format, nil
+	_, err = r.Seek(0, io.SeekStart)
+
+	if err != nil {
+		return nil, "", err
 	}
 
 	x, err := exif.Decode(r)
@@ -46,11 +47,11 @@ func NormaliseDecode(r io.ReadSeeker) (image.Image, string, error) {
 	case 5:
 		img = imaging.Transpose(img)
 	case 6:
-		img = imaging.Rotate90(img)
+		img = imaging.Rotate270(img)
 	case 7:
 		img = imaging.Transverse(img)
 	case 8:
-		img = imaging.Rotate270(img)
+		img = imaging.Rotate90(img)
 	}
 
 	return img, format, nil
